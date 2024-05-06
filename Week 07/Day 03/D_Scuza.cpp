@@ -12,37 +12,31 @@ int main() {
     {
         ll n, q; cin >> n >> q;
 
-        ll v[n], prefixSum[n];
-        pair<ll, ll> myPair[n];
-
-        cin >> v[0];
-        prefixSum[0] = v[0];
-        myPair[0].first = v[0];
-        myPair[0].second = 0;
-
-        for(ll i=1; i<n; i++) {
+        vector<ll> v(n+1, 0), prefixSum(n+2, 0), ans(q);
+        for(ll i=1; i<=n; i++) {
             cin >> v[i];
-            prefixSum[i] = prefixSum[i-1]+v[i];
-            myPair[i].first = v[i];
-            myPair[i].second = i;
-        } 
-
-        vector<ll> maxArray(n);
-        maxArray[n-1] = v[n-1];
-        for(ll i=n-2; i>=0; i--) {
-            maxArray[i] = max(maxArray[i+1], v[i]);
+            prefixSum[i] = prefixSum[i-1] + v[i];
         }
-
-        // sort(v, v+n);  
+        
+        vector<pair<ll, ll>> myPair(q);
         for(ll i=0; i<q; i++) {
-            ll x; cin >> x;
-            auto it = lower_bound(maxArray.begin(), maxArray.end(), x);
-            ll maxL= it - maxArray.begin();
-            
-            if(maxL == n) cout << prefixSum[n-1] << " ";
-            else if(maxL == 0) cout << 0 << " ";
-            else cout << prefixSum[maxL - 1] << " ";
+            cin >> myPair[i].first;
+            myPair[i].second = i;                     
         }
+
+        sort(myPair.begin(), myPair.end());  
+
+        ll maxL = 0;
+        for(ll i=0; i<q; i++) { 
+            while (true)
+            {
+                if(maxL == n or v[maxL+1] > myPair[i].first) break;
+                maxL++;
+            }
+            ans[myPair[i].second] = prefixSum[maxL];                  
+        }        
+
+        for(ll i=0; i<q; i++) cout << ans[i] << " ";
         cout << endl;
     }
     return 0;
