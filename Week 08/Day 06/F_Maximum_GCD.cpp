@@ -14,7 +14,8 @@ int main() {
     {
         ll n; 
         cin >> n;
-        cout << n/2 << endl;
+        ll ans = n / 2;
+        cout << ans << endl;
     }
     
     return 0;
